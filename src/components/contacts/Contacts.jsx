@@ -1,8 +1,9 @@
 import { Box } from "components/box/Box"
+import LoaderWrapper from "components/loader/Loader"
 import { useEffect, useMemo } from "react"
 import { useDispatch, useSelector } from "react-redux"
 // import { contactsListDeleteAction } from "redux/contacts/contacts.slice"
-import { deleteContactsThunk, getContactsThunk } from "redux/contacts/contacts.thunk"
+import { deleteContactsThunk, fetchContactsThunk } from "redux/contacts/contacts.thunk"
 import { filterAction } from "redux/filter/filter.slice"
 import styled from "styled-components"
 
@@ -69,9 +70,10 @@ const DeleteContactBtn = styled.button`
 
 export const Contacts = () => {
   const filter = useSelector(state => state.filter.filter)
-  const contacts = useSelector(state => state.contacts.contacts)
+  const contacts = useSelector(state => state.contacts)
+  const isLoading = useSelector(state => state.contacts.isLoading)
+  const error = useSelector(state => state.contacts.error)
   const dispatch = useDispatch()
-
   
   const handleFilterContacts = (e) => {
     const filterValue = e.target.value;
@@ -89,7 +91,7 @@ export const Contacts = () => {
   useEffect(()=>{
     // if (!!contacts.items.length){
 
-      dispatch(getContactsThunk())
+      dispatch(fetchContactsThunk())
     // }
     // return
 
@@ -106,13 +108,19 @@ export const Contacts = () => {
       )
     }, [contacts, filter]) 
 
-    return <Box  display= "flex" flexDirection="column" justifyContent= "space-evenly" alignItems= "center" p="0" as={"ul"}>
+    return (
+      <>
+      {error && <Box p={3} pt={5}>{error}</Box>}
+    <Box  display= "flex" flexDirection="column" justifyContent= "space-evenly" alignItems= "center" p="0" as={"ul"}>
+        {isLoading && <Box p={3} pb={5}>{LoaderWrapper()}</Box>}
         <Box style={{listStyle: "none"}} display="flex" justifyContent= "center" alignItems= "center" as={"li"}>
             <Label>Find contacts by name<FilterInput placeholder="pls input name, which you want search..." name="filter" value={filter} onChange={handleFilterContacts}></FilterInput></Label>
         </Box>
-        {visibleContacts.map(({id, name, number})=>{
-            return <ContactsItem key={id}>{name}: {number}<DeleteContactBtn type="button" onClick={()=>handleDeleteContact(id)}>Delete</DeleteContactBtn></ContactsItem>
+        {visibleContacts.map(({id, name, phone})=>{
+            return <ContactsItem key={id}>{name}: {phone}<DeleteContactBtn type="button" onClick={()=>handleDeleteContact(id)}>Delete</DeleteContactBtn></ContactsItem>
         })}
     </Box>
+      </>
+    )
 } 
 

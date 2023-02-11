@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { contactsInitState } from "./contacts.init-state";
-import { deleteContactsThunk, getContactsThunk, putContactsThunk } from "./contacts.thunk";
+import { addContactsThunk, deleteContactsThunk, fetchContactsThunk } from "./contacts.thunk";
 
 const contactsSlice = createSlice({
     name: 'contacts',
@@ -9,20 +9,51 @@ const contactsSlice = createSlice({
         // contactsListAction: (state, {payload}) => {(state.contacts.items).push(payload)},
         // contactsListDeleteAction: (state, {payload})=> {state.contacts.items = (state.contacts.items.filter((contact) => contact.id !== payload))}
     },
-    extraReducers: {
-        [getContactsThunk.pending]: (state) => {
-            (state.contacts.isLoading) = true},
-        [getContactsThunk.fulfilled]: (state, {payload}) => {
-            (state.contacts.items) = (payload); 
-            (state.contacts.isLoading) = false},
-        [putContactsThunk.pending]: (state) => {
-            (state.contacts.isLoading) = true},
-        [putContactsThunk.fulfilled]: (state, {payload}) => {(state.contacts.items).push(payload); 
-            (state.contacts.isLoading) = false},
-        [deleteContactsThunk.pending]: (state) => {
-            (state.contacts.isLoading) = true},
-        [deleteContactsThunk.fulfilled]: (state, {payload})=> {(state.contacts.items) = (state.contacts.items.filter((contact) => contact.id !== payload.id)); 
-            (state.contacts.isLoading) = false}
+    extraReducers: (builder) => {
+        builder.addCase(fetchContactsThunk.pending, (state) => {
+            (state.isLoading) = true})
+        // [fetchContactsThunk.pending]: (state) => {
+        //     (state.isLoading) = true},
+        .addCase(fetchContactsThunk.fulfilled, (state, {payload}) => {
+            (state.items) = payload; 
+            (state.isLoading) = false})
+        // [fetchContactsThunk.fulfilled]: (state, {payload}) => {
+        //     (state.items) = payload; 
+        //     (state.isLoading) = false},
+        .addCase(fetchContactsThunk.rejected, (state, {error}) => {
+            (state.error) = error.message;
+            (state.isLoading) = false})
+        // [fetchContactsThunk.rejected]: (state, {error}) => {
+        //     (state.error) = error.message;
+        //     (state.isLoading) = false},
+        .addCase(addContactsThunk.pending, (state) => {
+            (state.isLoading) = true})
+        // [addContactsThunk.pending]: (state) => {
+        //     (state.isLoading) = true},
+        .addCase(addContactsThunk.fulfilled, (state, {payload}) => {(state.items).push(payload); 
+            (state.isLoading) = false})
+        // [addContactsThunk.fulfilled]: (state, {payload}) => {(state.items).push(payload); 
+        //     (state.isLoading) = false},
+        .addCase(addContactsThunk.rejected, (state, {error}) => {
+            (state.error) = error.message; 
+            (state.isLoading) = false})
+        // [addContactsThunk.rejected]: (state, {error}) => {
+        //     (state.error) = error.message; 
+        //     (state.isLoading) = false},
+        .addCase(deleteContactsThunk.pending,  (state) => {
+            (state.isLoading) = true})
+        // [deleteContactsThunk.pending]: (state) => {
+        //     (state.isLoading) = true},
+        .addCase(deleteContactsThunk.fulfilled, (state, {payload})=> {(state.items) = (state.items.filter((contact) => contact.id !== payload.id)); 
+            (state.isLoading) = false})
+        // [deleteContactsThunk.fulfilled]: (state, {payload})=> {(state.items) = (state.items.filter((contact) => contact.id !== payload.id)); 
+        //     (state.isLoading) = false},
+        .addCase(deleteContactsThunk.rejected, (state, {error}) => {
+            (state.error) = error.message; 
+            (state.isLoading) = false})
+        // [deleteContactsThunk.rejected]: (state, {error}) => {
+        //     (state.error) = error.message; 
+        //     (state.isLoading) = false},
         }
     })
 

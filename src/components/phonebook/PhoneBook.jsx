@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 // import { nanoid } from "nanoid";
 // import { contactsListAction } from "redux/contacts/contacts.slice";
-import { putContactsThunk } from "redux/contacts/contacts.thunk";
+import { addContactsThunk } from "redux/contacts/contacts.thunk";
 
 const Label = styled.label`
   display: flex;
@@ -66,18 +66,18 @@ const AddContactBtn = styled.button`
 export const PhoneBook = () => {
   const [state, setState] = useState({
     name: "",
-    number: "",
+    phone: "",
   })
 
-  const contacts = useSelector(state => state.contacts.contacts)
+  const contacts = useSelector(state => state.contacts)
 
-  const {name, number} = state;
+  const {name, phone} = state;
 
   const dispatch =  useDispatch()
 
   const reset = () => {
 
-    setState({name: "", number: ""})
+    setState({name: "", phone: ""})
   }
 
   const handleChange = (e) => {
@@ -105,11 +105,11 @@ export const PhoneBook = () => {
         const contact = {
           // id: nanoid(),
           name,
-          number,
+          phone,
         }
     
         // dispatch(contactsListAction(contact))
-        dispatch(putContactsThunk(contact))
+        dispatch(addContactsThunk(contact))
       } else {
         return alert('This contact is already in your phone book...')
       }
@@ -133,11 +133,11 @@ export const PhoneBook = () => {
       <TelInput
           placeholder="pls input your number..."
           type="tel"
-          name="number"
+          name="phone"
           pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
           title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
           required
-          value={number}
+          value={phone}
           onChange={handleChange}>
       </TelInput>
       </Label>
