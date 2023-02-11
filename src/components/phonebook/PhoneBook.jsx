@@ -2,8 +2,9 @@ import { Box } from "components/box/Box"
 import styled from "styled-components"
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { nanoid } from "nanoid";
-import { contactsListAction } from "redux/contacts/contacts.slice";
+// import { nanoid } from "nanoid";
+// import { contactsListAction } from "redux/contacts/contacts.slice";
+import { putContactsThunk } from "redux/contacts/contacts.thunk";
 
 const Label = styled.label`
   display: flex;
@@ -102,12 +103,13 @@ export const PhoneBook = () => {
   
       if (count === 0) {
         const contact = {
-          id: nanoid(),
+          // id: nanoid(),
           name,
           number,
         }
     
-        dispatch(contactsListAction(contact))
+        // dispatch(contactsListAction(contact))
+        dispatch(putContactsThunk(contact))
       } else {
         return alert('This contact is already in your phone book...')
       }

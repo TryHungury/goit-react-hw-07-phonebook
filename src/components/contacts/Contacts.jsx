@@ -1,8 +1,8 @@
 import { Box } from "components/box/Box"
 import { useEffect, useMemo } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { contactsListDeleteAction } from "redux/contacts/contacts.slice"
-import { getContactsThunk } from "redux/contacts/contacts.thunk"
+// import { contactsListDeleteAction } from "redux/contacts/contacts.slice"
+import { deleteContactsThunk, getContactsThunk } from "redux/contacts/contacts.thunk"
 import { filterAction } from "redux/filter/filter.slice"
 import styled from "styled-components"
 
@@ -81,7 +81,9 @@ export const Contacts = () => {
 
   const handleDeleteContact = (id) => {
 
-    dispatch(contactsListDeleteAction(id))
+    // dispatch(contactsListDeleteAction(id))
+
+    dispatch(deleteContactsThunk(id))
   }
 
   useEffect(()=>{
