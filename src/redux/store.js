@@ -3,10 +3,10 @@ import { filterInitState } from "./filter/filter.init-state";
 import { contactsInitState } from "./contacts/contacts.init-state";
 import { contactsReducer } from "./contacts/contacts.slice";
 import { filterReducer } from "./filter/filter.slice";
-import storage from 'redux-persist/lib/storage'
+// import storage from 'redux-persist/lib/storage'
 import {
-    persistStore,
-    persistReducer,
+    // persistStore,
+    // persistReducer,
     FLUSH,
     REHYDRATE,
     PAUSE,
@@ -25,17 +25,18 @@ const initState = {
 //     filter: filterReducer,
 // })
 
-const persistConfig = {
-    key: 'phone_book',
-    storage,
-  }
+// const persistConfig = {
+//     key: 'phone_book',
+//     storage,
+//   }
 
-const persistedReducer = persistReducer(persistConfig, contactsReducer)
+// const persistedReducer = persistReducer(persistConfig, contactsReducer)
 
 export const store = configureStore({
     preloadedState: initState,
     reducer: {
-        contacts: persistedReducer,
+        // contacts: persistedReducer,
+        contacts: contactsReducer,
         filter: filterReducer,
     },
 
@@ -47,4 +48,4 @@ export const store = configureStore({
     }),
 })
 
-export const persistor = persistStore(store);
+// export const persistor = persistStore(store);

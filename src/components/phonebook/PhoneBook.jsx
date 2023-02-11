@@ -90,7 +90,7 @@ export const PhoneBook = () => {
       e.preventDefault();
       let count = 0;
 
-      contacts.map((contact)=>{
+      contacts.items.map((contact)=>{
 
        if (contact.name === name) {
 

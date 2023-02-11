@@ -1,7 +1,8 @@
 import { Box } from "components/box/Box"
-import { useMemo } from "react"
+import { useEffect, useMemo } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { contactsListDeleteAction } from "redux/contacts/contacts.slice"
+import { getContactsThunk } from "redux/contacts/contacts.thunk"
 import { filterAction } from "redux/filter/filter.slice"
 import styled from "styled-components"
 
@@ -83,13 +84,26 @@ export const Contacts = () => {
     dispatch(contactsListDeleteAction(id))
   }
 
+  useEffect(()=>{
+    // if (!!contacts.items.length){
+
+      dispatch(getContactsThunk())
+    // }
+    // return
+
+  },[dispatch])
+
   const visibleContacts = useMemo(()=>{ 
     const filterNormalize = filter.toLowerCase();
-      return contacts.filter((contact) => {
-        return contact.name.toLowerCase().includes(filterNormalize)
+      return contacts.items.filter(({name}) => {
+        if(!!name){
+          return name.toLowerCase().includes(filterNormalize)
+        }
+        return false;
       }
       )
     }, [contacts, filter]) 
+
     return <Box  display= "flex" flexDirection="column" justifyContent= "space-evenly" alignItems= "center" p="0" as={"ul"}>
         <Box style={{listStyle: "none"}} display="flex" justifyContent= "center" alignItems= "center" as={"li"}>
             <Label>Find contacts by name<FilterInput placeholder="pls input name, which you want search..." name="filter" value={filter} onChange={handleFilterContacts}></FilterInput></Label>
